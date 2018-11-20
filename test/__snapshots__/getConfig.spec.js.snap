@@ -10,7 +10,6 @@ Object {
   },
   "ignore": Array [],
   "linters": Object {},
-  "relative": false,
   "renderer": "update",
   "subTaskConcurrency": 1,
 }
@@ -26,7 +25,6 @@ Object {
   },
   "ignore": Array [],
   "linters": Object {},
-  "relative": false,
   "renderer": "update",
   "subTaskConcurrency": 1,
 }
@@ -48,7 +46,6 @@ Object {
     ],
     ".*rc": "jsonlint",
   },
-  "relative": false,
   "renderer": "update",
   "subTaskConcurrency": 1,
 }

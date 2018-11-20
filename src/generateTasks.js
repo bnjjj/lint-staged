@@ -33,14 +33,7 @@ module.exports = function generateTasks(config, stagedRelFiles) {
         .map(file => path.relative(cwd, file)),
       patterns,
       globOptions
-    ).map(file => {
-      // if you set relative option, then the file path will be relative to your package.json
-      if (config.relative) {
-        return path.normalize(file)
-      }
-      // Return absolute path after the filter is run
-      return path.resolve(cwd, file)
-    })
+    ).map(path.normalize)
 
     const task = { pattern, commands, fileList }
     debug('Generated task: \n%O', task)

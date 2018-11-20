@@ -72,20 +72,6 @@ describe('generateTasks', () => {
     expect(commands).toEqual(['lint'])
   })
 
-  it('should return absolute paths', () => {
-    const [task] = generateTasks(
-      {
-        linters: {
-          '*': 'lint'
-        }
-      },
-      files
-    )
-    task.fileList.forEach(file => {
-      expect(path.isAbsolute(file)).toBe(true)
-    })
-  })
-
   it('should return relative paths', () => {
     const [task] = generateTasks(
       {
@@ -125,24 +111,8 @@ describe('generateTasks', () => {
     })
   })
 
-  it('should match pattern "*.js"', () => {
-    const result = generateTasks(config, files)
-    const linter = result.find(item => item.pattern === '*.js')
-    expect(linter).toEqual({
-      pattern: '*.js',
-      commands: 'root-js',
-      fileList: [
-        `${workDir}/test.js`,
-        `${workDir}/deeper/test.js`,
-        `${workDir}/deeper/test2.js`,
-        `${workDir}/even/deeper/test.js`,
-        `${workDir}/.hidden/test.js`
-      ].map(path.normalize)
-    })
-  })
-
   it('should match pattern "*.js" and return relative path', () => {
-    const result = generateTasks(Object.assign({}, config, { relative: true }), files)
+    const result = generateTasks(config, files)
     const linter = result.find(item => item.pattern === '*.js')
     expect(linter).toEqual({
       pattern: '*.js',
@@ -157,24 +127,8 @@ describe('generateTasks', () => {
     })
   })
 
-  it('should match pattern "**/*.js"', () => {
-    const result = generateTasks(config, files)
-    const linter = result.find(item => item.pattern === '**/*.js')
-    expect(linter).toEqual({
-      pattern: '**/*.js',
-      commands: 'any-js',
-      fileList: [
-        `${workDir}/test.js`,
-        `${workDir}/deeper/test.js`,
-        `${workDir}/deeper/test2.js`,
-        `${workDir}/even/deeper/test.js`,
-        `${workDir}/.hidden/test.js`
-      ].map(path.normalize)
-    })
-  })
-
   it('should match pattern "**/*.js" with relative path', () => {
-    const result = generateTasks(Object.assign({}, config, { relative: true }), files)
+    const result = generateTasks(config, files)
     const linter = result.find(item => item.pattern === '**/*.js')
     expect(linter).toEqual({
       pattern: '**/*.js',
@@ -195,7 +149,7 @@ describe('generateTasks', () => {
     expect(linter).toEqual({
       pattern: 'deeper/*.js',
       commands: 'deeper-js',
-      fileList: [`${workDir}/deeper/test.js`, `${workDir}/deeper/test2.js`].map(path.normalize)
+      fileList: [`deeper/test.js`, `deeper/test2.js`].map(path.normalize)
     })
   })
 
@@ -205,7 +159,7 @@ describe('generateTasks', () => {
     expect(linter).toEqual({
       pattern: '.hidden/*.js',
       commands: 'hidden-js',
-      fileList: [path.normalize(`${workDir}/.hidden/test.js`)]
+      fileList: [path.normalize(`.hidden/test.js`)]
     })
   })
 
@@ -216,16 +170,16 @@ describe('generateTasks', () => {
       pattern: '*.{css,js}',
       commands: 'root-css-or-js',
       fileList: [
-        `${workDir}/test.js`,
-        `${workDir}/deeper/test.js`,
-        `${workDir}/deeper/test2.js`,
-        `${workDir}/even/deeper/test.js`,
-        `${workDir}/.hidden/test.js`,
-        `${workDir}/test.css`,
-        `${workDir}/deeper/test.css`,
-        `${workDir}/deeper/test2.css`,
-        `${workDir}/even/deeper/test.css`,
-        `${workDir}/.hidden/test.css`
+        `test.js`,
+        `deeper/test.js`,
+        `deeper/test2.js`,
+        `even/deeper/test.js`,
+        `.hidden/test.js`,
+        `test.css`,
+        `deeper/test.css`,
+        `deeper/test2.css`,
+        `even/deeper/test.css`,
+        `.hidden/test.css`
       ].map(path.normalize)
     })
   })
@@ -247,9 +201,7 @@ describe('generateTasks', () => {
     expect(linter).toEqual({
       pattern: 'TeSt.*',
       commands: 'lint',
-      fileList: [`${workDir}/test.js`, `${workDir}/test.css`, `${workDir}/test.txt`].map(
-        path.normalize
-      )
+      fileList: [`test.js`, `test.css`, `test.txt`].map(path.normalize)
     })
   })
 
@@ -266,7 +218,7 @@ describe('generateTasks', () => {
     expect(result[0]).toEqual({
       pattern,
       commands,
-      fileList: [`${workDir}/cool/js.js`].map(path.normalize)
+      fileList: [`cool/js.js`].map(path.normalize)
     })
   })
 
@@ -286,14 +238,14 @@ describe('generateTasks', () => {
     expect(prjTask).toEqual({
       pattern: '*.js',
       commands: 'my-cmd',
-      fileList: [`${workDir}/prj/test.js`].map(path.normalize)
+      fileList: [`test.js`].map(path.normalize)
     })
 
     const parentFolderTask = result.find(item => item.pattern === '../outside/*.js')
     expect(parentFolderTask).toEqual({
       pattern: '../outside/*.js',
       commands: 'my-cmd',
-      fileList: [`${workDir}/outside/test.js`, `${workDir}/outside/test2.js`].map(path.normalize)
+      fileList: [`../outside/test.js`, `../outside/test2.js`].map(path.normalize)
     })
   })
 })
