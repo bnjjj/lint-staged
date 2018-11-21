@@ -26,7 +26,6 @@ const files = [
 // Mocks get hoisted
 jest.mock('../src/resolveGitDir.js')
 const workDir = path.join(os.tmpdir(), 'tmp-lint-staged')
-resolveGitDir.mockReturnValue(workDir)
 
 const config = {
   linters: {
@@ -42,10 +41,13 @@ const config = {
 describe('generateTasks', () => {
   beforeAll(() => {
     jest.spyOn(process, 'cwd').mockReturnValue(workDir)
+    console.log(workDir)
+    resolveGitDir.mockReturnValue(workDir)
   })
 
   afterAll(() => {
     process.cwd.mockRestore()
+    resolveGitDir.mockRestore()
   })
 
   it('should work with simple configuration', () => {

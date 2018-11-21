@@ -287,16 +287,6 @@ The following is equivalent:
 }
 ```
 
-### Use ng lint with angular cli >= 7.0.0
-
-```json
-{
-  "linters": {
-    "*.ts": "ng lint myProjectName --files"
-  }
-}
-```
-
 ### Stylelint for CSS with defaults and for SCSS with SCSS syntax
 
 ```json
